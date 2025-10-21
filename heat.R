@@ -20,7 +20,7 @@ library(yaml)
 #' # [3,]    0 12.5 50.0 12.5    0
 #' # [4,]    0  0.0 12.5  0.0    0
 #' # [5,]    0  0.0  0.0  0.0    0
-solve_2d <- function(temp, spacing, alpha=1.0, time_step=1.0) {
+solve_2d <- function(temp, spacing, alpha = 1.0, time_step = 1.0) {
 
   n_rows <- nrow(temp)
   n_cols <- ncol(temp)
@@ -28,7 +28,7 @@ solve_2d <- function(temp, spacing, alpha=1.0, time_step=1.0) {
     return(temp)
   }
 
-  # R's matrix indexing is (row, col), so spacing[1] is dy
+  # Matrix indexing in R is (row, col), so spacing[1] is dy
   dy2 <- spacing[1]^2
   dx2 <- spacing[2]^2
 
@@ -40,27 +40,27 @@ solve_2d <- function(temp, spacing, alpha=1.0, time_step=1.0) {
   k_center <- -2.0 * (dx2 + dy2)
 
   # Get "shifted" views of the interior, noting that R indexing is 1-based
-  T_C <- temp[2:(n_rows-1), 2:(n_cols-1)] # Center
-  T_U <- temp[1:(n_rows-2), 2:(n_cols-1)] # Up
-  T_D <- temp[3:n_rows, 2:(n_cols-1)]       # Down
-  T_L <- temp[2:(n_rows-1), 1:(n_cols-2)] # Left
-  T_R <- temp[2:(n_rows-1), 3:n_cols]       # Right
+  temp_center <- temp[2:(n_rows - 1), 2:(n_cols - 1)]
+  temp_up <- temp[1:(n_rows - 2), 2:(n_cols - 1)]
+  temp_down <- temp[3:n_rows, 2:(n_cols - 1)]
+  temp_left <- temp[2:(n_rows - 1), 1:(n_cols - 2)]
+  temp_right <- temp[2:(n_rows - 1), 3:n_cols]
 
   # Calculate the convolved interior
   convolved_interior <- (
-    k_center * T_C +
-    k_up * T_U +
-    k_down * T_D +
-    k_left * T_L +
-    k_right * T_R
+    k_center * temp_center +
+    k_up * temp_up +
+    k_down * temp_down +
+    k_left * temp_left +
+    k_right * temp_right
   )
 
-  # Calculate the diffusion constant K
-  K <- alpha * time_step / (2.0 * (dx2 * dy2))
+  # Calculate the diffusion number, a constant
+  diffusion_number <- alpha * time_step / (2.0 * (dx2 * dy2))
 
   # Calculate the change in temperature
-  delta_temp <- matrix(0.0, nrow=n_rows, ncol=n_cols)
-  delta_temp[2:(n_rows-1), 2:(n_cols-1)] <- K * convolved_interior
+  delta_temp <- matrix(0.0, nrow = n_rows, ncol = n_cols)
+  delta_temp[2:(n_rows - 1), 2:(n_cols - 1)] <- diffusion_number * convolved_interior
 
   # Add the change to the original temperature
   result <- temp + delta_temp
@@ -75,7 +75,7 @@ solve_2d <- function(temp, spacing, alpha=1.0, time_step=1.0) {
 #'
 #' @details
 #' Based on the Python version of the model in \url{https://github.com/csdms/bmi-example-python}.
-#' 
+#'
 #' @examples
 #' heat <- Heat$new()
 #' heat$time
@@ -85,7 +85,7 @@ solve_2d <- function(temp, spacing, alpha=1.0, time_step=1.0) {
 #' heat$advance_in_time()
 #' heat$time
 #' # [1] 0.25
-#' 
+#'
 #' heat <- Heat$new(shape=c(5, 5))
 #' new_temp <- matrix(0, 5, 5)
 #' new_temp[3, 3] <- 100.0
@@ -98,7 +98,7 @@ solve_2d <- function(temp, spacing, alpha=1.0, time_step=1.0) {
 #' # [3,]    0 12.5 50.0 12.5    0
 #' # [4,]    0  0.0 12.5  0.0    0
 #' # [5,]    0  0.0  0.0  0.0    0
-#' 
+#'
 #' heat <- Heat$new(alpha=.5)
 #' heat$time_step
 #' # [1] 0.5
@@ -116,7 +116,7 @@ Heat <- R6Class("Heat",
     .temperature = NULL,
     .next_temperature = NULL
   ),
-  
+
   public = list(
     #' Create a new Heat model.
     #'
@@ -124,8 +124,8 @@ Heat <- R6Class("Heat",
     #' @param spacing Numeric vector c(dy, dx).
     #' @param origin Numeric vector c(x0, y0).
     #' @param alpha Numeric, thermal diffusivity.
-    initialize = function(shape=c(10, 20), spacing=c(1.0, 1.0),
-                          origin=c(0.0, 0.0), alpha=1.0) {
+    initialize = function(shape = c(10, 20), spacing = c(1.0, 1.0),
+                          origin = c(0.0, 0.0), alpha = 1.0) {
       private$.shape <- shape
       private$.spacing <- spacing
       private$.origin <- origin
@@ -134,35 +134,35 @@ Heat <- R6Class("Heat",
 
       private$.time_step <- min(spacing)^2 / (4.0 * private$.alpha)
 
-      # Initialize temperature and buffer grids, noting matrix() takes (nrow, ncol)
+      # Initialize temperature and buffer variables (matrix() takes nrow x ncol
       private$.temperature <- matrix(runif(shape[1] * shape[2]),
                                      nrow = shape[1],
                                      ncol = shape[2])
       private$.next_temperature <- matrix(NA,
-                                         nrow = shape[1],
-                                         ncol = shape[2])
+                                          nrow = shape[1],
+                                          ncol = shape[2])
     },
-    
+
     #' Calculate new temperatures for the next time step.
     advance_in_time = function() {
       private$.next_temperature <- solve_2d(
-        temp=private$.temperature,
-        spacing=private$.spacing,
-        alpha=private$.alpha,
-        time_step=private$.time_step
+        temp = private$.temperature,
+        spacing = private$.spacing,
+        alpha = private$.alpha,
+        time_step = private$.time_step
       )
 
       private$.temperature <- private$.next_temperature
       private$.time <- private$.time + private$.time_step
     }
   ),
-  
+
   active = list(
     #' @field time Current model time (read-only).
     time = function() {
       return(private$.time)
     },
-    
+
     #' @field temperature The temperature matrix (read/write).
     temperature = function(new_temp) {
       if (missing(new_temp)) {
@@ -171,7 +171,7 @@ Heat <- R6Class("Heat",
         private$.temperature <- new_temp
       }
     },
-    
+
     #' @field time_step Model time step (read/write).
     time_step = function(time_step) {
       if (missing(time_step)) {
@@ -180,17 +180,17 @@ Heat <- R6Class("Heat",
         private$.time_step <- time_step
       }
     },
-    
+
     #' @field shape Shape of the model grid (read-only).
     shape = function() {
       return(private$.shape)
     },
-    
+
     #' @field spacing Spacing of the model grid (read-only).
     spacing = function() {
       return(private$.spacing)
     },
-    
+
     #' @field origin Origin coordinates of the model grid (read-only).
     origin = function() {
       return(private$.origin)
