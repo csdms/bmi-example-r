@@ -1,6 +1,9 @@
-library(R6)
-library(yaml)
+#' Heat Equation Model in R
 
+#' @title solve_2d
+#'
+#' @export
+#' @details
 #' Solve the 2D Heat Equation on a uniform mesh using base R functions.
 #'
 #' @param temp A matrix representing the temperature.
@@ -69,12 +72,16 @@ solve_2d <- function(temp, spacing, alpha = 1.0, time_step = 1.0) {
 }
 
 
-#' Heat model
+#' @title Heat
 #'
-#' Models temperature diffusion on a two-dimensional uniform grid.
-#'
+#' @export
+#' @import R6
+#' @import yaml
 #' @details
-#' Based on the Python version of the model in \url{https://github.com/csdms/bmi-example-python}.
+#' The Heat model uses an explicit finite difference scheme to solve the 2D
+#' heat equation. The time step is determined by the thermal diffusivity and
+#' grid spacing to ensure numerical stability. This model is based on the
+#' Python version found at \url{https://github.com/csdms/bmi-example-python}.
 #'
 #' @examples
 #' heat <- Heat$new()
