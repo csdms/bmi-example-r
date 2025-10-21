@@ -125,6 +125,7 @@ Heat <- R6Class("Heat",
   ),
 
   public = list(
+    #' @description
     #' Create a new Heat model.
     #'
     #' @param shape Numeric vector c(rows, cols).
