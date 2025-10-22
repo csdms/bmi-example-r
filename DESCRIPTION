@@ -2,13 +2,14 @@ Package: BmiHeat
 Title: Basic Model Interface Example in R
 Version: 0.1.0
 Authors@R: c(
-    person("Mark", "Piper", , "mark.piper@colorado.edu", role = c("aut", "cre")),
+    person("Mark", "Piper", email = "mark.piper@colorado.edu", role = c("aut", "cre")),
+    person("Stefan", "Verhoeven", email = "s.verhoeven@esciencecenter.nl", role = "aut"),
     person("Community Surface Dynamics Modeling System", role = "cph"))
 Description:
     An example implementation of the Basic Model Interface (BMI) in R.
     This package provides a simple heat diffusion model that is wrapped with
     a BMI using the BMI R mappings.
-URL: https://bmi.csdms.io
+URL: https://bmi.csdms.io, https://csdms.colorado.edu
 License: MIT + file LICENSE
 Encoding: UTF-8
 Dependencies: R (>= 4.0.0)
