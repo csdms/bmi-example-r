@@ -66,7 +66,6 @@ heat$time_step
 \itemize{
 \item \href{#method-Heat-new}{\code{Heat$new()}}
 \item \href{#method-Heat-advance_in_time}{\code{Heat$advance_in_time()}}
-\item \href{#method-Heat-from_file_like}{\code{Heat$from_file_like()}}
 \item \href{#method-Heat-clone}{\code{Heat$clone()}}
 }
 }
@@ -88,7 +87,8 @@ Create a new Heat model.
 
 \item{\code{origin}}{Numeric vector c(x0, y0).}
 
-\item{\code{alpha}}{Numeric, thermal diffusivity.}
+\item{\code{alpha}}{Numeric, thermal diffusivity.
+Calculate new temperatures for the next time step.}
 }
 \if{html}{\out{</div>}}
 }
@@ -97,18 +97,13 @@ Create a new Heat model.
 \if{html}{\out{<a id="method-Heat-advance_in_time"></a>}}
 \if{latex}{\out{\hypertarget{method-Heat-advance_in_time}{}}}
 \subsection{Method \code{advance_in_time()}}{
-Calculate new temperatures for the next time step.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Heat$advance_in_time()}\if{html}{\out{</div>}}
 }
 
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Heat-from_file_like"></a>}}
-\if{latex}{\out{\hypertarget{method-Heat-from_file_like}{}}}
-\subsection{Method \code{from_file_like()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Heat$from_file_like(file_like)}\if{html}{\out{</div>}}
+\subsection{Details}{
+This method updates the model's temperature matrix in place and
+advances the model time by one time step.
 }
 
 }

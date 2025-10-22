@@ -152,6 +152,9 @@ Heat <- R6Class("Heat",
     },
 
     #' Calculate new temperatures for the next time step.
+    #' @details
+    #' This method updates the model's temperature matrix in place and
+    #' advances the model time by one time step.
     advance_in_time = function() {
       private$.next_temperature <- solve_2d(
         temp = private$.temperature,
@@ -206,14 +209,31 @@ Heat <- R6Class("Heat",
   )
 )
 
-#' Create a Heat object from a file-like object (static method)
+
+#' Create a Heat object from a YAML config file (static method)
 #'
-#' @param file_like A file path or connection to a YAML config file.
-#' @return A new instance of a Heat object.
-Heat$set("public", "from_file_like",
-  function(file_like) {
-    config <- yaml::read_yaml(file_like)
-    do.call(self$new, config)
-  },
-  overwrite = TRUE
-)
+#' @param yaml_file Path to a configuration file in YAML format.
+#' @return A new instance of Heat.
+#' @export
+#' @details
+#' The YAML file should define the keys `shape`, `spacing`, `origin`, and
+#' `alpha`.
+#' @examples
+#' # Assuming a YAML file "heat_config.yaml" with the following contents:
+#' # shape: [5, 5]
+#' # spacing: [1.0, 1.0]
+#' # origin: [0.0, 0.0]
+#' # alpha: 0.5
+#' heat <- Heat$from_yaml_file("heat_config.yaml")
+#' heat$shape
+#' # [1] 5 5
+#' heat$spacing
+#' # [1] 1 1
+#' heat$origin
+#' # [1] 0 0
+#' heat$alpha
+#' # [1] 0.5
+Heat$from_yaml_file <- function(yaml_file) {
+  config <- yaml::read_yaml(yaml_file)
+  do.call(Heat$new, config)
+}
