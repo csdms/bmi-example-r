@@ -1,4 +1,4 @@
-Package: bmi.example.r
+Package: BmiHeat
 Title: Basic Model Interface Example in R
 Version: 0.1.0
 Authors@R: c(
