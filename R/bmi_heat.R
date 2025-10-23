@@ -77,7 +77,9 @@ BmiHeat <- R6::R6Class(
             return(NULL)
         },
 
-        get_var_type = function(name) stop("Not implemented"),
+        get_var_type = function(name) {
+            typeof(self$get_value_ptr(name))
+        },
 
         get_var_units = function(name) {
             private$var_units[[name]]
@@ -126,10 +128,26 @@ BmiHeat <- R6::R6Class(
         set_value = function(name, src) stop("Not implemented"),
         set_value_at_indices = function(name, inds, src) stop("Not implemented"),
 
-        get_grid_rank = function(grid) stop("Not implemented"),
-        get_grid_size = function(grid) stop("Not implemented"),
-        get_grid_type = function(grid) stop("Not implemented"),
-        get_grid_shape = function(grid, shape) stop("Not implemented"),
+        get_grid_rank = function(grid) {
+            length(private$model$shape)
+        },
+
+        get_grid_size = function(grid) {
+            prod(private$model$shape)
+        },
+
+        get_grid_type = function(grid) {
+            private$grid_type[[as.character(grid)]]
+        },
+
+        # Can't do pass-by-reference in R.
+        get_grid_shape = function(grid, shape) {
+            # shape <- private$model$shape
+            shape[] <- private$model$shape
+            # shape[] <- as.vector(private$model$shape)
+            return(invisible(shape))
+        },
+
         get_grid_spacing = function(grid, spacing) stop("Not implemented"),
         get_grid_origin = function(grid, origin) stop("Not implemented"),
         get_grid_node_count = function(grid) stop("Not implemented"),

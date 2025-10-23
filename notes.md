@@ -38,6 +38,26 @@ temperature_flat = vector(mode = "double", length = 6*8)
 temperature_flat[] <- as.vector(temperature)
 ```
 
+Call BMI methods that require an output parameter.
+```R
+rank = x$get_grid_rank(grid_id)
+shape = vector(mode = "integer", length = rank)
+the_shape <- x$get_grid_shape(grid_id, shape)
+```
+
+Can't do pass-by-reference in R.
+See https://stackoverflow.com/a/11758240.
+```R
+> shape = vector(mode = "integer", length = rank)
+> tracemem(shape)
+[1] "<0x7fdf30ceb408>"
+> the_shape <- x$get_grid_shape(grid_id, shape)
+tracemem[0x7fdf30ceb408 -> 0x7fdf078456e8]: <Anonymous> 
+> tracemem(the_shape)
+[1] "<0x7fdf078456e8>"
+```
+
+
 Need to import `bmir` into `bmiheatr` package.
 This will be done with roxygen2 when I add doc code headers to the `BmiHeat` class.
 
