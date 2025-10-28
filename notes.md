@@ -15,7 +15,7 @@ x = BmiHeat$new()
 
 Call the (renamed) BMI `initialize` function.
 ```R
-config_file = "./inst/extdata/heat_config.yaml"
+config_file <- system.file("extdata", "heat_config.yaml", package="bmiheatr")
 x$bmi_initialize(config_file)
 ```
 
