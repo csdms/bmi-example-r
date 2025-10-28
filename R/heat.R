@@ -212,19 +212,21 @@ Heat <- R6Class("Heat",
 
 #' Create a Heat object from a YAML config file (static method)
 #'
+#' @name Heat$from_yaml_file
 #' @param yaml_file Path to a configuration file in YAML format.
 #' @return A new instance of Heat.
-#' @export
 #' @details
 #' The YAML file should define the keys `shape`, `spacing`, `origin`, and
 #' `alpha`.
 #' @examples
-#' # Assuming a YAML file "heat_config.yaml" with the following contents:
+#' # Assuming a YAML file "heat_config.yaml" in the "inst/extdata" directory
+#' # with the following contents:
 #' # shape: [5, 5]
 #' # spacing: [1.0, 1.0]
 #' # origin: [0.0, 0.0]
 #' # alpha: 0.5
-#' heat <- Heat$from_yaml_file("heat_config.yaml")
+#' cfg_file <- system.file("extdata", "heat_config.yaml", package="bmiheatr")
+#' heat <- Heat$from_yaml_file(cfg_file)
 #' heat$shape
 #' # [1] 5 5
 #' heat$spacing
