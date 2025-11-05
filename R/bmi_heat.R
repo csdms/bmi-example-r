@@ -78,16 +78,23 @@ BmiHeat <- R6::R6Class(
         },
 
         get_var_type = function(name) {
-            typeof(self$get_value_ptr(name))
+            typeof(private$values[[name]])
         },
 
         get_var_units = function(name) {
             private$var_units[[name]]
         },
 
-        get_var_itemsize = function(name) stop("Not implemented"),
+        get_var_itemsize = function(name) {
+            switch(typeof(private$values[[name]]),
+                   integer = 4L,
+                   double = 8L,
+                   stop("Unsupported variable type", call. = FALSE))
+        },
 
-        get_var_nbytes = function(name) stop("Not implemented"),
+        get_var_nbytes = function(name) {
+            length(private$values[[name]]) * self$get_var_itemsize(name)
+        },
 
         get_var_location = function(name) {
             private$var_loc[[name]]
