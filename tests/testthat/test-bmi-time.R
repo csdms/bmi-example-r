@@ -1,4 +1,4 @@
-## test-time.R
+## test-bmi-time.R
 
 test_that("BMI time functions give expected values", {
   model <- BmiHeat$new()

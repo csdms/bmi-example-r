@@ -1,4 +1,4 @@
-## test-info.R
+## test-bmi-info.R
 
 test_that("BMI info functions give expected values", {
   model <- BmiHeat$new()
