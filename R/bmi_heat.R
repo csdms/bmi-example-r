@@ -147,18 +147,21 @@ BmiHeat <- R6::R6Class(
             private$grid_type[[as.character(grid)]]
         },
 
-        # Can't do pass-by-reference in R.
-        get_grid_shape = function(grid, shape) {
-            # shape <- private$model$shape
-            shape[] <- private$model$shape
-            # shape[] <- as.vector(private$model$shape)
-            return(invisible(shape))
+        get_grid_shape = function(grid, shape = NULL) {
+            private$model$shape
         },
 
-        get_grid_spacing = function(grid, spacing) stop("Not implemented"),
-        get_grid_origin = function(grid, origin) stop("Not implemented"),
-        get_grid_node_count = function(grid) stop("Not implemented"),
+        get_grid_spacing = function(grid, spacing = NULL) {
+            private$model$spacing
+        },
 
+        get_grid_origin = function(grid, origin = NULL) {
+            private$model$origin
+        },
+
+        get_grid_node_count = function(grid) {
+            self$get_grid_size(grid)
+        },
 
         # A non-BMI helper method to expose the underlying model.
         display_model = function() {
