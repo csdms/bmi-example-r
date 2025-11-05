@@ -65,3 +65,13 @@ Does `get_value_ptr` work correctly?
 What about flattening its output?
 
 I've chosen to do negligible error handling.
+
+The [Rcpp library](https://www.rdocumentation.org/packages/Rcpp/versions/1.1.0)
+provides a way to pass by reference
+using `Rcpp::NumericVector` and similar classes.
+But that would require changing the R6 class methods
+to accept those types instead of base R types.
+
+Rcpp requires a C++ compiler.
+
+Rcpp is more analogous to using Cython than NumPy.
