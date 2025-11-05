@@ -120,19 +120,18 @@ BmiHeat <- R6::R6Class(
             private$model$time_step
         },
 
-        get_value = function(name, dest) {
-            value <- self$get_value_ptr(name)
-            dest[] <- as.vector(value)
-            return(invisible(dest))
+        get_value = function(name, dest = NULL) {
+            return(invisible(as.vector(private$values[[name]])))
         },
 
         get_value_at_indices = function(name, inds, dest) stop("Not implemented"),
 
-        get_value_ptr = function(name) {
-            private$values[[name]]
+        set_value = function(name, src) {
+            dims = private$model$shape
+            private$values[[name]] <- matrix(src, nrow = dims[1], ncol = dims[2])
+            invisible(NULL)
         },
 
-        set_value = function(name, src) stop("Not implemented"),
         set_value_at_indices = function(name, inds, src) stop("Not implemented"),
 
         get_grid_rank = function(grid) {
