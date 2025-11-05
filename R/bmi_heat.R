@@ -162,7 +162,19 @@ BmiHeat <- R6::R6Class(
             self$get_grid_size(grid)
         },
 
-        # A non-BMI helper method to expose the underlying model.
+        #
+        # Non-BMI convenience methods
+        #
+
+        get_value_as_matrix = function(name) {
+            private$values[[name]]
+        },
+
+        to_matrix = function(src) {
+            dims = private$model$shape
+            matrix(src, nrow = dims[1], ncol = dims[2])
+        },
+
         display_model = function() {
             private$model
         }
