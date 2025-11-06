@@ -121,7 +121,7 @@ BmiHeat <- R6::R6Class(
         },
 
         get_value = function(name, dest = NULL) {
-            return(invisible(as.vector(private$values[[name]])))
+            as.vector(private$values[[name]])
         },
 
         get_value_at_indices = function(name, inds, dest) stop("Not implemented"),
