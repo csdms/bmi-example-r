@@ -1,4 +1,24 @@
-
+#' @title BmiHeat
+#' @description
+#' Basic Model Interface (BMI) implementation for the Heat model.
+#' @export
+#' @import R6
+#' @import bmir
+#' @import yaml
+#' @details
+#' This class implements the Basic Model Interface (BMI) for the 2D Heat
+#' Equation model defined in the Heat R6 class. It provides methods for
+#' initializing the model from a YAML configuration file, advancing the model
+#' in time, and getting/setting model variables. Documentation on the BMI
+#' methods can be found at \url{https://bmi.csdms.io/}.
+#' @examples
+#' config_file <- system.file("extdata", "heat_config.yaml", package = "bmiheatr")
+#' model <- BmiHeat$new()
+#' model$bmi_initialize(config_file)
+#' print(model$get_component_name())
+#' temperature <- model$get_value("plate_surface__temperature")
+#' print(head(temperature))
+#' model$bmi_finalize()
 BmiHeat <- R6::R6Class(
     "BmiHeat",
     inherit = bmir::Bmi,

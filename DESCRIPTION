@@ -14,6 +14,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 Dependencies: R (>= 4.0.0)
 Imports:
+    bmir,
     R6,
     yaml
 Roxygen: list(markdown = TRUE)
