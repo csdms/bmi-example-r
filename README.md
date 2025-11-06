@@ -93,6 +93,9 @@ x$bmi_finalize()
 
 ## Acknowledgments
 
+Stefan Verhoeven and Bart Schilperoort at the Netherlands eScience
+Center provided valuable feedback in developing this example.
+
 This work is supported by the U.S. National Science Foundation under
 Award
 No. [2104102](https://www.nsf.gov/awardsearch/showAward?AWD_ID=2104102),
