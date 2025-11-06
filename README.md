@@ -30,6 +30,7 @@ Install the development version of the package for this example,
 `bmiheatr`, from its GitHub repository:
 
 ``` r
+# install.packages("remotes")
 remotes::install_github("csdms/bmi-example-r")
 ```
 
