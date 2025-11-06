@@ -1,12 +1,13 @@
 ## test-bmi-grid.R
 
+grid_id <- 0
+
 test_that("BMI grid functions give expected values", {
   model <- BmiHeat$new()
   
   config_file <- system.file("extdata", "heat_config.yaml", package = "bmiheatr")
   model$bmi_initialize(config_file)
 
-  grid_id <- 0
   grid_rank <- model$get_grid_rank(grid_id)
   expect_equal(grid_rank, 2L)
   grid_size <- model$get_grid_size(grid_id)
