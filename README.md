@@ -1,0 +1,101 @@
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+<!-- badges: start -->
+
+<!-- badges: end -->
+
+# bmi-example-r
+
+An example of implementing the [R
+mappings](https://github.com/csdms/bmi-r) for the CSDMS [Basic Model
+Interface](https://bmi.csdms.io) (BMI).
+
+## Overview
+
+This is an example of implementing a BMI for a simple model that solves
+the diffusion equation on a uniform rectangular plate with Dirichlet
+boundary conditions. The [model](./R/heat.R) and its
+[BMI](./R/bmi_heat.R) are written in R. [Tests](./tests/test_that) of
+the BMI are provided.
+
+## Installation
+
+This example can be built and installed on Linux, macOS, and Windows.
+
+Install the development version of the BMI R mappings from GitHub:
+
+``` r
+# install.packages("remotes")
+remotes::install_github("csdms/bmi-r")
+```
+
+then install the package for this example, `bmiheatr`, from its GitHub
+repository:
+
+``` r
+remotes::install_github("csdms/bmi-example-r")
+```
+
+If you’ve already cloned the repository locally, you can install the
+mappings from R with `remotes::install_local()`.
+
+Load the example into an R session with:
+
+``` r
+library(bmiheatr)
+```
+
+Check that the library is loaded by displaying the `BmiHeat` R6 class:
+
+``` r
+BmiHeat
+```
+
+### Virtual environments
+
+We recommend installing R packages into a virtual environment. At CSDMS,
+we use [Miniforge](https://github.com/conda-forge/miniforge) to set up
+virtual environments with the `conda` package manager.
+
+Use `conda` to create an environment called “R” with a set of packages
+that are useful for developing and running R code:
+
+``` bash
+conda create -n R -c conda-forge r-base r-essentials r-devtools
+```
+
+Activate the environment, then follow the directions above to install
+the BMI R mappings and example into the environment.
+
+## Example
+
+The following R code demonstrates how to set up and tear down an
+instance of the `Heat` model through its BMI.
+
+``` r
+library(bmiheatr)
+
+# Make a new instance of `BmiHeat`.
+x <- BmiHeat$new()
+
+# Initialize the `Heat` model through its BMI with a config file.
+config_file <- system.file("extdata", "heat_config.yaml", package = "bmiheatr")
+x$bmi_initialize(config_file)
+
+# Show the model name through its BMI.
+x$get_component_name()
+#> [1] "The 2D Heat Equation"
+
+# Finalize the model through its BMI.
+x$bmi_finalize()
+```
+
+## Acknowledgments
+
+This work is supported by the U.S. National Science Foundation under
+Award
+No. [2104102](https://www.nsf.gov/awardsearch/showAward?AWD_ID=2104102),
+*Collaborative Research: Frameworks: OpenEarthscape – Transformative
+Cyberinfrastructure for Modeling and Simulation in the Earth-Surface
+Science Communities*.
