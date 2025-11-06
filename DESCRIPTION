@@ -17,6 +17,7 @@ Imports:
     bmir,
     R6,
     yaml
+Remotes: csdms/bmi-r
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Suggests: 
