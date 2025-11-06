@@ -26,22 +26,15 @@ the BMI are provided.
 
 This example can be built and installed on Linux, macOS, and Windows.
 
-Install the development version of the BMI R mappings from GitHub:
-
-``` r
-# install.packages("remotes")
-remotes::install_github("csdms/bmi-r")
-```
-
-then install the package for this example, `bmiheatr`, from its GitHub
-repository:
+Install the development version of the package for this example,
+`bmiheatr`, from its GitHub repository:
 
 ``` r
 remotes::install_github("csdms/bmi-example-r")
 ```
 
 If you’ve already cloned the repository locally, you can install the
-mappings from R with `remotes::install_local()`.
+package from R with `remotes::install_local()`.
 
 Load the example into an R session with:
 

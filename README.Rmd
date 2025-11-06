@@ -38,17 +38,13 @@ The [model](./R/heat.R) and its [BMI](./R/bmi_heat.R) are written in R.
 
 This example can be built and installed on Linux, macOS, and Windows.
 
-Install the development version of the BMI R mappings from GitHub:
-```R
-# install.packages("remotes")
-remotes::install_github("csdms/bmi-r")
-```
-then install the package for this example, `bmiheatr`, from its GitHub repository:
+Install the development version of the package for this example,
+`bmiheatr`, from its GitHub repository:
 ``` r
 remotes::install_github("csdms/bmi-example-r")
 ```
 If you've already cloned the repository locally,
-you can install the mappings from R with `remotes::install_local()`.
+you can install the package from R with `remotes::install_local()`.
 
 Load the example into an R session with:
 ```R
