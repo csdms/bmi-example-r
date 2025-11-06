@@ -124,7 +124,9 @@ BmiHeat <- R6::R6Class(
             as.vector(private$values[[name]])
         },
 
-        get_value_at_indices = function(name, inds, dest) stop("Not implemented"),
+        get_value_at_indices = function(name, inds, dest = NULL) {
+            as.vector(private$values[[name]])[inds]
+        },
 
         set_value = function(name, src) {
             dims = private$model$shape
@@ -132,7 +134,10 @@ BmiHeat <- R6::R6Class(
             invisible(NULL)
         },
 
-        set_value_at_indices = function(name, inds, src) stop("Not implemented"),
+        set_value_at_indices = function(name, inds, src) {
+            private$values[[name]][inds] <- src
+            invisible(NULL)
+        },
 
         get_grid_rank = function(grid) {
             length(private$model$shape)
