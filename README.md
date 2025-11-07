@@ -31,7 +31,7 @@ Install the development version of the package for this example,
 
 ``` r
 # install.packages("remotes")
-remotes::install_github("csdms/bmi-example-r")
+remotes::install_github("csdms/bmi-example-r", build_vignettes = TRUE)
 ```
 
 If you’ve already cloned the repository locally, you can install the
@@ -86,6 +86,13 @@ x$get_component_name()
 
 # Finalize the model through its BMI.
 x$bmi_finalize()
+```
+
+For more details on running the `Heat` model by itself and through its
+BMI, view the vignettes (long-form examples) included in this package:
+
+``` r
+browseVignettes("bmiheatr")
 ```
 
 ## Acknowledgments
