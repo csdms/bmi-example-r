@@ -35,7 +35,19 @@ BmiHeat <- R6::R6Class(
         component_name = "The 2D Heat Equation",
         start_time = 0.0,
         end_time = Inf,
-        time_units = "s"
+        time_units = "s",
+
+        get_model_values = function(var_name) {
+            if (var_name == "plate_surface__temperature") {
+                private$values[[var_name]] <- private$model$temperature
+            }
+        },
+
+        set_model_values = function(var_name, values) {
+            if (var_name == "plate_surface__temperature") {
+                private$model$temperature <- private$values[[var_name]]
+            }
+        }
     ),
 
     public = list(
@@ -141,21 +153,25 @@ BmiHeat <- R6::R6Class(
         },
 
         get_value = function(name, dest = NULL) {
+            private$get_model_values(name)
             as.vector(private$values[[name]])
         },
 
         get_value_at_indices = function(name, inds, dest = NULL) {
+            private$get_model_values(name)
             as.vector(private$values[[name]])[inds]
         },
 
         set_value = function(name, src) {
             dims = private$model$shape
             private$values[[name]] <- matrix(src, nrow = dims[1], ncol = dims[2])
+            private$set_model_values(name, private$values[[name]])
             invisible(NULL)
         },
 
         set_value_at_indices = function(name, inds, src) {
             private$values[[name]][inds] <- src
+            private$set_model_values(name, private$values[[name]])
             invisible(NULL)
         },
 

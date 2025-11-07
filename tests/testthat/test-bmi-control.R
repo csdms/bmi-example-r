@@ -1,6 +1,7 @@
 ## test-bmi-control.R
 
 config_file <- system.file("extdata", "heat_config.yaml", package = "bmiheatr")
+var_name <- "plate_surface__temperature"
 
 test_that("BMI initialize requires config file", {
   model <- BmiHeat$new()
@@ -22,6 +23,19 @@ test_that("BMI update advances model time", {
   time_after <- model$get_current_time()
 
   expect_gt(time_after, time_before)
+
+  model$bmi_finalize()
+})
+
+test_that("BMI update advances model state", {
+  model <- BmiHeat$new()
+  model$bmi_initialize(config_file)
+
+  temperature_before <- model$get_value(var_name)
+  model$update()
+  temperature_after <- model$get_value(var_name)
+
+  expect_true(sum(temperature_after) != sum(temperature_before))
 
   model$bmi_finalize()
 })
