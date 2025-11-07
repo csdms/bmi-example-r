@@ -1,0 +1,163 @@
+---
+title: "Run the Heat model through its BMI"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Run the Heat model through its BMI}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+`Heat` models the diffusion of temperature on a rectangular plate
+with Dirichlet boundary conditions.
+View the source code for the [model](../R/heat.R) and its [BMI](../R/bmi_heat.R).
+
+In the [previous example](./run-model.Rmd),
+we set up and ran `Heat` as a standalone model.
+Here, we run the `Heat` model through its BMI,
+using only calls to the BMI functions.
+(For reference,
+view the [list of BMI functions](https://bmi.csdms.io/en/stable/bmi.spec.html).)
+
+Start by importing the `bmiheatr` library, which includes the `Heat` model and its BMI.
+```{r setup}
+library(bmiheatr)
+```
+
+Create a new instance of the model's BMI.
+```{R}
+x <- BmiHeat$new()
+```
+
+When using a BMI,
+a model must be started with parameters listed in a model configuration file.
+A sample `Heat` configuration file is included in the `bmiheatr` package.
+Locate it and view its contents.
+```{r}
+config_file <- system.file("extdata", "heat_config.yaml", package = "bmiheatr")
+cat(paste0(readLines(config_file), collapse="\n"), fill = TRUE)
+```
+
+Start the `Heat` model through its BMI with the configuration file.
+```{r}
+x$bmi_initialize(config_file)
+```
+Note that the BMI `initialize` function has been renamed to `bmi_initialize`
+because `initialize` is a reserved name for classes in R.
+
+View the model name.
+```{r}
+x$get_component_name()
+```
+
+View time information for the model.
+```{r}
+x$get_start_time()
+x$get_end_time()
+x$get_current_time()
+x$get_time_step()
+x$get_time_units()
+```
+
+View input and output variables.
+```{r}
+x$get_input_var_names()
+x$get_output_var_names()
+```
+
+Next, get the identifier for the grid on which the temperature variable
+for the `Heat` model is defined.
+```{r}
+grid_id <- x$get_var_grid("plate_surface__temperature")
+```
+
+View the attributes of this grid.
+```{r}
+x$get_grid_type(grid_id)
+x$get_grid_rank(grid_id)
+grid_size <- x$get_grid_size(grid_id)
+grid_size
+grid_shape <- x$get_grid_shape(grid_id)
+grid_shape
+x$get_grid_spacing(grid_id)
+x$get_grid_origin(grid_id)
+```
+We've assigned variables to some of these attributes because they'll be used later.
+
+Get information on the temperature variable.
+```{r}
+var_name <- x$get_output_var_names()
+x$get_var_type(var_name)
+x$get_var_units(var_name)
+x$get_var_itemsize(var_name)
+x$get_var_nbytes(var_name)
+x$get_var_location(var_name)
+```
+
+Through the model's BMI, zero out the initial temperature field,
+except for an impulse near the middle of the matrix.
+Note that `set_value` expects a vector (one-dimensional array) for input.
+The values are re-dimensionalized in the model.
+```{r}
+temperature <- matrix(data = 0, nrow = grid_shape[1], ncol = grid_shape[2])
+temperature[grid_shape[1]/2, grid_shape[2]/2] <- 100
+x$set_value(var_name, as.vector(temperature))
+```
+
+Check that the temperature field has been updated in the model.
+Note that, analogous to `set_value`,
+`get_value` outputs a one-dimensional array.
+```{r}
+check <- x$get_value(var_name)
+matrix(check, nrow = grid_shape[1], ncol = grid_shape[2])
+```
+
+Run the model forward in time by a single step.
+Show the new time.
+```{r}
+x$update()
+x$get_current_time()
+```
+
+View the new state of the temperature field.
+```{r}
+matrix(x$get_value(var_name), nrow = grid_shape[1], ncol = grid_shape[2])
+```
+There's diffusion!
+
+Run the model to some distant time.
+```{r}
+distant_time <- 10 * x$get_time_step()
+while (x$get_current_time() < distant_time) {
+  x$update()
+} 
+```
+
+View the resulting temperature field.
+```{r}
+matrix(x$get_value(var_name), nrow = grid_shape[1], ncol = grid_shape[2])
+```
+The initial temperature spike has almost completely diffused away.
+
+Because the temperature at the edges of the plate is clamped to 0.0,
+it isn't conserved over time.
+```{r}
+sum(x$get_value(var_name))
+```
+
+End the model run.
+```{r}
+x$bmi_finalize()
+```
+Note that the BMI `finalize` function has been renamed to `bmi_finalize`
+because `finalize` is a reserved name for classes in R.
+
+How is this example different from the [previous example](./run-model.Rmd)?
+In this example, no direct calls to the `Heat` model were made!
+Control of the model was only performed through its BMI.
