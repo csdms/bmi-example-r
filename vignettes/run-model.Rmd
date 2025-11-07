@@ -14,9 +14,11 @@ knitr::opts_chunk$set(
 )
 ```
 
-*Heat* models the diffusion of temperature on a rectangular plate
+`Heat` models the diffusion of temperature on a rectangular plate
 with Dirichlet boundary conditions.
 View the [source code](../R/heat.R) for the model.
+
+Here, we show an example of how to set up and run the `Heat` model.
 
 Start by importing the `bmiheatr` library, which includes the `Heat` model.
 ```{r setup}
@@ -29,7 +31,7 @@ and the thermal conductivity.
 ```{R}
 n_rows = 6
 n_cols = 7
-m = Heat$new(shape = c(n_rows, n_cols), alpha = 1.0)
+m <- Heat$new(shape = c(n_rows, n_cols), alpha = 1.0)
 ```
 
 View the grid spacing and origin, which take their default values.
@@ -66,7 +68,7 @@ View the new state of the temperature field.
 ```{r}
 m$temperature
 ```
-Diffusion has occurred!
+There's diffusion!
 
 Run the model to some distant time.
 ```{r}
