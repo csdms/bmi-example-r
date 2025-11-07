@@ -1,0 +1,88 @@
+---
+title: "Run the Heat model"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Run the Heat model}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+*Heat* models the diffusion of temperature on a rectangular plate
+with Dirichlet boundary conditions.
+View the [source code](../R/heat.R) for the model.
+
+Start by importing the `bmiheatr` library, which includes the `Heat` model.
+```{r setup}
+library(bmiheatr)
+```
+
+Create a new instance of the `Heat` model,
+setting custom values for the shape of the numerical grid
+and the thermal conductivity.
+```{R}
+n_rows = 6
+n_cols = 7
+m = Heat$new(shape = c(n_rows, n_cols), alpha = 1.0)
+```
+
+View the grid spacing and origin, which take their default values.
+```{r}
+m$spacing
+m$origin
+```
+
+View the current model time,
+as well as the  time step,
+which is derived from a stability criterion.
+```{r}
+m$time
+m$time_step
+```
+
+Zero out the initial temperature field (it's random noise by default)
+and place an impulse near the middle.
+View the result.
+```{R}
+m$temperature[] <- 0
+m$temperature[m$shape[1]/2, m$shape[2]/2] <- 100
+m$temperature
+```
+
+Run the model forward in time by a single step.
+Show the new time.
+```{r}
+m$advance_in_time()
+m$time
+```
+
+View the new state of the temperature field.
+```{r}
+m$temperature
+```
+Diffusion has occurred!
+
+Run the model to some distant time.
+```{r}
+distant_time <- 10 * m$time_step
+while (m$time < distant_time) {
+  m$advance_in_time()
+} 
+```
+
+View the resulting temperature field.
+```{r}
+m$temperature
+```
+The initial temperature spike has almost completely diffused away.
+Note that because the edges of the plate are clamped to 0.0,
+temperature isn't conserved.
+```{r}
+sum(m$temperature)
+```
